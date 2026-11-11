@@ -9,6 +9,3 @@ dependencies = [
     "pytest>=9.2.0",
     "pytest-playwright>=0.10.0",
 ]
-
-[tool.pytest.ini_options]
-testpaths = ["day4", "day5"]
