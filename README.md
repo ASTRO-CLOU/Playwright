@@ -4,14 +4,6 @@
 
 Документация, по которой делаю работу: https://playwright.dev/python/docs
 
-## Как запустить
-
-```powershell
-uv sync
-uv run playwright install chromium
-uv run python day1/copied_example.py
-```
-
 ## День 1, 11.11.2026
 
 Взял пример из раздела "Usage" на странице https://playwright.dev/python/docs/library
@@ -38,17 +30,3 @@ Fast and reliable end-to-end testing for modern web apps | Playwright
 
 Зачем это нужно: первый вариант просто показывал заголовок, а второй проверяет,
 что страница открылась правильно, и всегда закрывает браузер.
-
-## Что лежит в папке
-
-- `day1/copied_example.py` — пример из документации как есть.
-- `day1/modified_example.py` — мой переделанный пример.
-- `day1/run.log` — вывод запуска обоих файлов.
-- `docs/screens` — скриншоты запуска.
-
-## План на остальные дни
-
-- День 2 (12.11.2026) — Locators, поиск элементов на странице.
-- День 3 (13.11.2026) — Actions, нажатия и ввод текста.
-- День 4 (14.11.2026) — Writing tests, первый тест на pytest.
-- День 5 (15.11.2026) — Network, подмена ответов сервера.
