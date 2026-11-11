@@ -1,0 +1,13 @@
+=== day1 / copied_example.py ===
+Команда: uv run python day1/copied_example.py
+Дата и время запуска: 2026-11-11 17:33
+Код завершения: 0
+Вывод:
+Fast and reliable end-to-end testing for modern web apps | Playwright
+
+=== day1 / modified_example.py ===
+Команда: uv run python day1/modified_example.py
+Дата и время запуска: 2026-11-11 17:33
+Код завершения: 0
+Вывод:
+Заголовок страницы: Playwright
