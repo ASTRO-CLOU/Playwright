@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Auto-waiting</title>
+  <style>
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <button id="disabled-then-enabled" disabled>Sign Up</button>
+
+  <br />
+  <div id="appears-later"></div>
+
+  <br />
+  <div style="position: relative; height: 40px">
+    <button id="covered">Save</button>
+    <div class="overlay"></div>
+  </div>
+
+  <br />
+  <div inert>
+    <button>Inert button</button>
+  </div>
+
+  <br />
+  <div style="opacity: 0">Transparent text</div>
+  <span style="width: 0; height: 0; display: block">Zero size text</span>
+
+  <script>
+    setTimeout(() => {
+      document.getElementById("disabled-then-enabled").removeAttribute("disabled");
+    }, 800);
+
+    setTimeout(() => {
+      const paragraph = document.createElement("p");
+      paragraph.textContent = "Loaded content";
+      document.getElementById("appears-later").appendChild(paragraph);
+    }, 700);
+  </script>
+</body>
+</html>

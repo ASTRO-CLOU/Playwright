@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Actions: mouse</title>
+</head>
+<body>
+  <button>Item</button>
+
+  <br /><br />
+  <div
+    id="item-to-be-dragged"
+    draggable="true"
+    style="width: 120px; height: 48px; background: #d0d0d0"
+  >
+    Drag me
+  </div>
+  <div
+    id="item-to-drop-at"
+    style="width: 160px; height: 48px; background: #f0f0f0"
+  >
+    Drop here
+  </div>
+
+  <br />
+  <div
+    data-testid="scrolling-container"
+    style="height: 120px; overflow-y: scroll"
+  >
+    <div style="height: 600px">Long list of rows</div>
+  </div>
+
+  <div style="height: 800px"></div>
+  <p>Footer text</p>
+
+  <script>
+    const dragItem = document.getElementById("item-to-be-dragged");
+    const dropTarget = document.getElementById("item-to-drop-at");
+
+    dragItem.addEventListener("dragstart", (event) => {
+      event.dataTransfer.setData("text/plain", "dragged item");
+    });
+
+    dropTarget.addEventListener("dragover", (event) => {
+      event.preventDefault();
+    });
+
+    dropTarget.addEventListener("drop", (event) => {
+      event.preventDefault();
+      dropTarget.textContent = "Dropped: " + event.dataTransfer.getData("text/plain");
+    });
+  </script>
+</body>
+</html>
