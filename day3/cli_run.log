@@ -1,0 +1,70 @@
+﻿CMD: uv run pytest day3/test_actions_example.py -k "text_input or date_and_time" -v
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\User\Desktop\PlaywrightPractic\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\User\Desktop\PlaywrightPractic
+configfile: pyproject.toml
+plugins: playwright-0.10.0
+collecting ... collected 15 items / 13 deselected / 2 selected
+
+day3/test_actions_example.py::test_text_input[chromium] PASSED           [ 50%]
+day3/test_actions_example.py::test_date_and_time_input[chromium] PASSED  [100%]
+
+============================== warnings summary ===============================
+day3/test_actions_example.py::test_text_input[chromium]
+  C:\Users\User\Desktop\PlaywrightPractic\.venv\Lib\site-packages\_pytest\fixtures.py:1392: PytestRemovedIn10Warning: Session-scoped fixtures defined as instance methods are deprecated.
+  Instance attributes set in the 'base_url' fixture will NOT be visible to test methods,
+  as each test gets a new instance while the fixture runs only once per class.
+  Use a @classmethod decorator below @pytest.fixture and set attributes on cls instead.
+  See https://docs.pytest.org/en/stable/deprecations.html#class-scoped-fixture-as-instance-method
+    fixturefunc = resolve_fixture_function(fixturedef, request)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 2 passed, 13 deselected, 1 warning in 0.83s =================
+CMD: uv run pytest day3/test_pytest_plugin.py -k "only_on_chromium or viewport" --browser firefox --browser webkit -v
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\User\Desktop\PlaywrightPractic\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\User\Desktop\PlaywrightPractic
+configfile: pyproject.toml
+plugins: playwright-0.10.0
+collecting ... collected 16 items / 12 deselected / 4 selected
+
+day3/test_pytest_plugin.py::test_only_on_chromium[firefox] SKIPPED (...) [ 25%]
+day3/test_pytest_plugin.py::test_viewport_from_conftest[firefox] PASSED  [ 50%]
+day3/test_pytest_plugin.py::test_only_on_chromium[webkit] SKIPPED (s...) [ 75%]
+day3/test_pytest_plugin.py::test_viewport_from_conftest[webkit] PASSED   [100%]
+
+============================== warnings summary ===============================
+day3/test_pytest_plugin.py::test_viewport_from_conftest[firefox]
+  C:\Users\User\Desktop\PlaywrightPractic\.venv\Lib\site-packages\_pytest\fixtures.py:1392: PytestRemovedIn10Warning: Session-scoped fixtures defined as instance methods are deprecated.
+  Instance attributes set in the 'base_url' fixture will NOT be visible to test methods,
+  as each test gets a new instance while the fixture runs only once per class.
+  Use a @classmethod decorator below @pytest.fixture and set attributes on cls instead.
+  See https://docs.pytest.org/en/stable/deprecations.html#class-scoped-fixture-as-instance-method
+    fixturefunc = resolve_fixture_function(fixturedef, request)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========== 2 passed, 2 skipped, 12 deselected, 1 warning in 3.74s ============
+CMD: uv run pytest day3/test_pytest_plugin.py -k base_url --base-url https://playwright.dev -v
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\User\Desktop\PlaywrightPractic\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\User\Desktop\PlaywrightPractic
+configfile: pyproject.toml
+plugins: playwright-0.10.0
+collecting ... collected 8 items / 7 deselected / 1 selected
+
+day3/test_pytest_plugin.py::test_base_url_from_command_line[chromium] PASSED [100%]
+
+============================== warnings summary ===============================
+day3/test_pytest_plugin.py::test_base_url_from_command_line[chromium]
+  C:\Users\User\Desktop\PlaywrightPractic\.venv\Lib\site-packages\_pytest\fixtures.py:1392: PytestRemovedIn10Warning: Session-scoped fixtures defined as instance methods are deprecated.
+  Instance attributes set in the 'base_url' fixture will NOT be visible to test methods,
+  as each test gets a new instance while the fixture runs only once per class.
+  Use a @classmethod decorator below @pytest.fixture and set attributes on cls instead.
+  See https://docs.pytest.org/en/stable/deprecations.html#class-scoped-fixture-as-instance-method
+    fixturefunc = resolve_fixture_function(fixturedef, request)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 1 passed, 7 deselected, 1 warning in 1.20s ==================
