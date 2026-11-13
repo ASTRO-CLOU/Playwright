@@ -158,6 +158,139 @@ day2/test_locators_example.py — 22 теста PASSED
 - текст `pip install pytest-playwright` на странице встречается дважды, поэтому
   пришлось добавить `.first`.
 
+## День 3, 13.11.2026
+
+Сегодня восемь разделов документации: Generating tests, Running and debugging
+tests, Trace viewer, Setting up CI, Pytest Plugin Reference, Library, Actions,
+Auto-waiting.
+
+### Generating tests
+
+`playwright codegen` открывает браузер и записывает то, что я в нём нажимаю,
+а потом отдаёт готовый код. Записывать мне нечего: окно браузера я руками не
+нажимаю, поэтому сохранил справку команды в `day3/codegen_help.log`.
+
+Главное из раздела: кнопка "Pick Locator" подбирает локатор в том же порядке,
+что я использовал в день 2 — сначала роль, потом текст, потом test id.
+
+### Running and debugging tests
+
+Запуски, которые я реально сделал (всё в `day3/cli_run.log`):
+
+1. Запуск только нужных тестов по имени:
+   `uv run pytest day3/test_actions_example.py -k "text_input or date_and_time" -v`
+   — выбралось 2 теста из 14.
+2. Запуск сразу в двух браузерах:
+   `uv run pytest day3/test_pytest_plugin.py -k "only_on_chromium or viewport"
+   --browser firefox --browser webkit -v` — 2 passed, 2 skipped. Пропущенные —
+   это тест с маркером `only_browser("chromium")`, он в других браузерах
+   честно пропускается.
+3. Адрес из командной строки:
+   `uv run pytest day3/test_pytest_plugin.py -k base_url
+   --base-url https://playwright.dev -v` — 1 passed, в тесте короткий адрес
+   `/python/docs/intro`.
+
+```
+================== 41 passed, 1 skipped, 1 warning in 16.58s ==================
+```
+
+Про `PWDEBUG=1`: в PowerShell это `$env:PWDEBUG=1`, потом `uv run pytest -s`.
+Открывается Inspector, где можно идти по шагам. У меня Inspector — отдельное
+окно, поэтому я его не запускал.
+
+### Trace viewer
+
+Запустил `uv run pytest day3/test_actions_example.py::test_text_input --tracing on`
+и получил `test-results/day3-test-actions-example-py-test-text-input-chromium/trace.zip`
+(32 КБ). Открыть её можно командой `uv run playwright show-trace <путь>` или
+перетащить файл на сайт https://trace.playwright.dev.
+
+### Setting up CI
+
+Добавил `.github/workflows/playwright.yml`. Документация ставит зависимости через
+`pip install -r requirements.txt`, а у меня проект на uv, поэтому в файле
+`uv sync` и `uv run playwright install --with-deps chromium`.
+
+Первый запуск упал за 7 секунд: у действия `astral-sh/setup-uv` нет тега `v10`,
+только полные версии. Поставил `v10.3.3`, и workflow прошёл: 1 минута 39 секунд,
+тесты зелёные (вкладка Actions на GitHub).
+
+### Pytest Plugin Reference
+
+Из этого раздела попробовал:
+
+1. Переопределил `browser_context_args` в `day3/conftest.py`: размер окна
+   1280x720 и язык `en-GB` — и проверил это тестом.
+2. `new_context` — второй чистый контекст внутри одного теста, как отдельный
+   браузер.
+3. Маркеры `only_browser`, `skip_browser` и `browser_context_args`
+   с `timezone_id="Europe/Berlin"`.
+4. Session-фикстуры `browser_name`, `is_chromium`, `is_firefox`, `is_webkit`.
+5. `--base-url` из командной строки.
+
+Заметил ошибку в документации: в примере с часовым поясом сравнивают
+`window.navigator.userAgent` со строкой "Europe/Berlin". Я сравнил часовой пояс
+через `Intl.DateTimeFormat().resolvedOptions().timeZone`, а язык — отдельной
+проверкой.
+
+### Library
+
+`day3/library_script.py` — четыре способа работы без pytest: обычный
+`sync_playwright`, первый скрипт на webkit со скриншотом, запуск через
+`sync_playwright().start()` (как в консоли) и асинхронный вариант. Вывод:
+
+```
+Usage: Playwright
+First script: скриншот сохранён в docs/screens/day3_webkit.png
+REPL: Playwright
+Async: Playwright
+```
+
+Вместо `time.sleep` из раздела про известные проблемы использовал
+`page.wait_for_timeout(300)`.
+
+Скриншот из webkit: `docs/screens/day3_webkit.png`
+
+### Actions
+
+Проверил почти всё из раздела: заполнение текста, даты, времени,
+`datetime-local`, галочки и радиокнопки, `select_option`, двойной клик, клик
+правой кнопкой, клик с Shift, клик по координатам, `force=True`,
+`dispatch_event`, `press_sequentially`, нажатия `Enter`, `Control+ArrowRight`,
+`$`, `Shift+A`, загрузку файлов (один файл, список, папка, очистка, файл из
+памяти), выбор файла через `expect_file_chooser`, `focus`, перетаскивание
+мышью и вручную, прокрутку.
+
+Что пришлось поменять из-за своих страниц:
+
+1. Текст, даты и мышь разложил по разным html-файлам. На одной странице
+   `get_by_role("textbox")` находит и поле даты, и поле пароля, и тогда
+   Playwright ругается на несколько совпадений.
+2. У загрузки файлов добавил `exact=True`: на странице есть и "Upload file",
+   и "Upload files", а поиск по подписи находит оба.
+
+Мой вариант: сценарий заполнения заказа. Там проверки `to_have_value` и
+`to_have_values`, имя загруженного файла через `evaluate`, переход по Tab
+и скриншоты результата.
+
+Скриншоты: `docs/screens/day3_order_form.png`, `docs/screens/day3_drag_drop.png`
+
+### Auto-waiting
+
+Шесть тестов на то, как Playwright ждёт элемент: клик по кнопке, которая
+сначала выключена; проверка, что текст появился; кнопка под прозрачным слоем;
+кнопка внутри `inert`; `force=True`; правила видимости.
+
+Что выяснил:
+
+- если элемент перекрыт, в ошибке будет `intercepts pointer events`;
+- для `inert` — `element is inert`;
+- элемент с `opacity: 0` считается видимым, а элемент нулевого размера — нет.
+
+Мой вариант: замеряю время клика (ждёт примерно 0.8 секунды, пока кнопка
+включится), ставлю `set_default_timeout(1500)` и проверяю текст ошибки
+`Timeout 1500ms exceeded`.
+
 ## Что лежит в папке
 
 - `day1/test_example.py` — тест из документации как есть.
@@ -172,4 +305,16 @@ day2/test_locators_example.py — 22 теста PASSED
 - `day2/test_locators_modified.py` — мои варианты локаторов.
 - `day2/fixtures` — html-страницы с тем же HTML, что в примерах.
 - `day2/pytest_run.log` — вывод запуска всех тестов дня 2.
+- `day3/test_actions_example.py` — примеры действий из документации.
+- `day3/test_actions_modified.py` — мой сценарий заполнения заказа.
+- `day3/test_auto_waiting_example.py` — примеры ожиданий.
+- `day3/test_auto_waiting_modified.py` — мои замеры времени и таймаутов.
+- `day3/test_pytest_plugin.py` — примеры из Pytest Plugin Reference.
+- `day3/conftest.py` — настройки размера окна и языка для тестов.
+- `day3/library_script.py` — скрипты из раздела Library.
+- `day3/fixtures` — html-страницы для действий и ожиданий.
+- `day3/files` — файлы и папка для проверки загрузки.
+- `day3/pytest_run.log`, `day3/cli_run.log`, `day3/library_run.log` — выводы запусков.
+- `day3/codegen_help.log` — справка команды `playwright codegen`.
+- `.github/workflows/playwright.yml` — запуск тестов на GitHub.
 - `docs/screens` — скриншоты страниц и запусков.
