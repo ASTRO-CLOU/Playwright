@@ -22,7 +22,7 @@ jobs:
         run: uv sync
 
       - name: Install browsers
-        run: uv run playwright install --with-deps chromium
+        run: uv run playwright install --with-deps chromium firefox webkit
 
       - name: Run tests
         run: uv run pytest --tracing=retain-on-failure
