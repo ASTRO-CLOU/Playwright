@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="utf-8"><title>Dialogs</title></head>
+<body>
+  <button id="alert" onclick="alert('Please enter your password')">Alert</button>
+  <button id="confirm" onclick="document.getElementById('result').textContent = confirm('Are you sure?') ? 'accepted' : 'dismissed'">Confirm</button>
+  <button id="prompt" onclick="document.getElementById('result').textContent = prompt('Enter a number:') || 'empty'">Prompt</button>
+  <div id="result" data-testid="result">nothing</div>
+</body>
+</html>

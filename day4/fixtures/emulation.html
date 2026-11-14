@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Emulation</title></head>
+<body>
+  <div data-testid="viewport"></div>
+  <div data-testid="locale"></div>
+  <div data-testid="timezone"></div>
+  <div data-testid="color-scheme"></div>
+  <div data-testid="user-agent"></div>
+  <div data-testid="geolocation">no geolocation</div>
+  <noscript><div data-testid="noscript">JavaScript is disabled</div></noscript>
+  <script>
+    document.querySelector('[data-testid="viewport"]').textContent =
+      innerWidth + "x" + innerHeight;
+    document.querySelector('[data-testid="locale"]').textContent = navigator.language;
+    document.querySelector('[data-testid="timezone"]').textContent =
+      Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.querySelector('[data-testid="color-scheme"]').textContent =
+      matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.querySelector('[data-testid="user-agent"]').textContent = navigator.userAgent;
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        document.querySelector('[data-testid="geolocation"]').textContent =
+          position.coords.latitude.toFixed(4) + ", " + position.coords.longitude.toFixed(4);
+      },
+      function () {
+        document.querySelector('[data-testid="geolocation"]').textContent = "no geolocation";
+      }
+    );
+  </script>
+</body>
+</html>

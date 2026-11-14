@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="utf-8"><title>Downloads</title></head>
+<body>
+  <button id="download" onclick="saveReport()">Download file</button>
+  <script>
+    function saveReport() {
+      const content = "Отчёт за день 4, скачан из теста Playwright";
+      const blob = new Blob([content], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "report.txt";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+  </script>
+</body>
+</html>

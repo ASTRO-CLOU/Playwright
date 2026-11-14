@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Assertions</title>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      setTimeout(function () {
+        document.querySelector('[data-testid="status"]').textContent = "Submitted";
+      }, 1000);
+    });
+  </script>
+</head>
+<body>
+  <div data-testid="status"></div>
+  <input type="checkbox" aria-label="Subscribe">
+  <input aria-label="Name" value="">
+  <ul>
+    <li>apple</li>
+    <li>banana</li>
+    <li>orange</li>
+  </ul>
+  <button disabled>Disabled</button>
+  <div style="display: none" data-testid="hidden">Hidden text</div>
+</body>
+</html>

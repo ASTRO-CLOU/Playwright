@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Clock</title>
+  <script>
+    window.activityTimer = null;
+
+    function renderTime() {
+      const now = new Date();
+      document.getElementById("current-time").textContent = now.toLocaleString("en-US");
+    }
+
+    function resetActivity() {
+      document.getElementById("logout").textContent = "";
+      clearTimeout(window.activityTimer);
+      window.activityTimer = setTimeout(function () {
+        document.getElementById("logout").textContent = "You have been logged out due to inactivity.";
+      }, 5 * 60 * 1000);
+    }
+
+    setInterval(renderTime, 1000);
+    renderTime();
+    resetActivity();
+  </script>
+</head>
+<body>
+  <div data-testid="current-time" id="current-time"></div>
+  <button onclick="resetActivity()">Click me</button>
+  <div id="logout"></div>
+</body>
+</html>

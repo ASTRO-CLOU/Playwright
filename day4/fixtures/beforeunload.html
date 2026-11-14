@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Before unload</title>
+  <script>
+    window.addEventListener("beforeunload", function (event) {
+      event.preventDefault();
+      event.returnValue = "There are unsaved changes";
+    });
+  </script>
+</head>
+<body>
+  <input aria-label="Draft" value="unsaved text">
+</body>
+</html>
