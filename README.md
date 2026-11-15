@@ -422,6 +422,124 @@ Python-функции из JavaScript.
 Пять примеров: ждать нужный запрос, ждать новое окно, добавить и убрать
 обработчик, поймать сообщение консоли, одноразовый обработчик.
 
+## День 5, 15.11.2026
+
+Последний день: Extensibility, Frames, Handles, Isolation, Mock APIs, Navigations,
+Network, Other locators, Pages, Page object models, Screenshots, Service Workers,
+Snapshot testing, Test generator, Touch events, Trace viewer, Videos, WebView2.
+
+Для этих разделов сделал маленький сервер `day5/server.py`: он отдаёт мои
+html-страницы по обычному адресу `http://127.0.0.1:порт/...`, потому что часть
+возможностей (запросы, service worker) на файлах `file://` не работает.
+
+Итог по всем дням:
+
+```
+==================== 207 passed, 1 skipped, 1 warning in 74.45s ====================
+```
+
+### Extensibility
+
+Своё правило поиска элементов. Зарегистрировал движок `tag=`, который просто
+отдаёт элементы по имени тега, и искал кнопки через `tag=button`.
+
+### Frames
+
+Три способа: `frame_locator` по классу рамки, объект рамки по `name`
+и по адресу через регулярное выражение.
+
+### Handles
+
+Ссылки на объекты внутри браузера: `evaluate_handle("window")`, размеры элемента
+через `bounding_box()`, передача ссылки в `evaluate` и освобождение через
+`dispose()`.
+
+### Isolation
+
+Два контекста в одном тесте: localStorage и куки в них независимы. Отдельно
+проверил передачу `storage_state` в новый контекст и `context.pages`.
+
+### Mock APIs
+
+`page.route` подменяет ответ сервера: свой JSON, изменение настоящего ответа
+(`route.fetch` + добавление фрукта), обрыв запроса и ответ с ошибкой 500.
+
+### Navigations
+
+`goto`, `wait_for_url` после клика, назад и вперёд, перезагрузка и состояния
+загрузки `domcontentloaded` и `load`.
+
+### Network
+
+События `request` и `response`, подсчёт статусов, блокировка css и картинок,
+выключенный интернет через `set_offline(True)`.
+
+### Other locators
+
+`css=`, `xpath=`, `:has-text()`, `:nth-match()`, а также поиск по расположению:
+`:right-of(:text("Username"))` и `:near(.promo-card)`. Здесь поймал ошибку
+строгого режима: `:right-of` нашёл четыре поля ввода, помог `.first`.
+
+### Pages
+
+Несколько страниц в одном контексте, ожидание новой вкладки через
+`context.expect_page()` и событие `page`.
+
+### Page object models
+
+Класс `TaskPage` в `day5/models/task_page.py`: внутри локаторы и действия,
+тест не знает про `#` и классы.
+
+### Screenshots
+
+Снимок страницы, всей страницы целиком, отдельного элемента и снимок в память.
+
+Скриншоты: `docs/screens/day5_page.png`, `day5_full_page.png`, `day5_element.png`
+
+### Service Workers
+
+Заблокировал service worker через `service_workers="block"`, а в обычном
+контексте поймал его через `context.expect_event("serviceworker")`. Ошибка была
+в пути: `register('/sw.js')` искал файл в корне сайта, а он лежит рядом
+со страницей.
+
+### Snapshot testing
+
+`to_match_aria_snapshot` сравнивает страницу по её структуре для незрячих
+пользователей (заголовки, ссылки, поля), а не по классам. Сравнение неполное:
+можно указать только часть дерева.
+
+### Test generator
+
+Справка `playwright codegen` сохранена в `day5/codegen.log`. Кроме записи
+действий команда умеет `--viewport-size`, `--device`, `--color-scheme`,
+`--timezone`, `--geolocation`, `--lang` и сохранение входа через
+`--save-storage` / `--load-storage`.
+
+### Touch events
+
+Проверил жест «перетаскивание» пальцем: собрал события `touchstart`,
+`touchmove` и `touchend` через `dispatch_event` и сравнил счётчики в журнале
+страницы.
+
+### Trace viewer
+
+Записал трассу вручную: `context.tracing.start(screenshots=True, snapshots=True,
+sources=True)`, потом `stop(path=...)`. Файл лежит в `day5/artifacts/trace.zip`,
+открывается `playwright show-trace`.
+
+### Videos
+
+Запись видео: `record_video_dir` и `record_video_size`, путь берётся из
+`page.video.path()`, сохраняется только после `context.close()`.
+Файл: `day5/artifacts/day5_video.webm`
+
+### WebView2
+
+Этот раздел описывает управление браузером внутри Windows-приложения через
+`connect_over_cdp(...)`. Такого приложения у меня нет, поэтому раздел прочитал,
+но тест не писал.
+
 ## Что лежит в папке
 
 - `day1/test_example.py` — тест из документации как есть.
@@ -463,4 +581,10 @@ Python-функции из JavaScript.
 - `day4/fixtures` — html-страницы для этих разделов.
 - `day4/pytest_run.log`, `day4/debug_run.log` — выводы запусков.
 - `.github/workflows/playwright.yml` — запуск тестов на GitHub.
+- `day5/test_*.py` — примеры последних восемнадцати разделов.
+- `day5/models/task_page.py` — класс страницы (Page Object).
+- `day5/server.py` — сервер, который отдаёт html-страницы из `day5/fixtures`.
+- `day5/artifacts` — записанная трасса и видео.
+- `day5/pytest_run.log`, `day5/codegen.log` — выводы запусков.
+- `docs/guide.md` — короткая шпаргалка по всей документации с вопросами.
 - `docs/screens` — скриншоты страниц и запусков.
