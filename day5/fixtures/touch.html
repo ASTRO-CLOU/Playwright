@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Touch</title>
+</head>
+<body>
+  <div id="pad" style="width: 300px; height: 200px; background: #ddd;">Pad</div>
+  <p id="log">start: 0, move: 0, end: 0</p>
+  <script>
+    const log = document.getElementById('log');
+    const pad = document.getElementById('pad');
+    const counters = { start: 0, move: 0, end: 0 };
+    const render = () => {
+      log.textContent = `start: ${counters.start}, move: ${counters.move}, end: ${counters.end}`;
+    };
+    pad.addEventListener('touchstart', () => { counters.start += 1; render(); });
+    pad.addEventListener('touchmove', () => { counters.move += 1; render(); });
+    pad.addEventListener('touchend', () => { counters.end += 1; render(); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Service Worker</title>
+</head>
+<body>
+  <h1>Страница с service worker</h1>
+  <p id="status">waiting</p>
+  <script>
+    navigator.serviceWorker.register('sw.js').then(() => {
+      document.getElementById('status').textContent = 'registered';
+    });
+  </script>
+</body>
+</html>

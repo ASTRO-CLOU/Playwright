@@ -13,3 +13,4 @@ wheels/
 test-results/
 .pytest_cache/
 
+day5/artifacts/raw/

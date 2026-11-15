@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Mock</title>
+</head>
+<body>
+  <h1>Фрукты</h1>
+  <ul id="fruits"></ul>
+  <script>
+    fetch('/api/v1/fruits')
+      .then((response) => response.json())
+      .then((items) => {
+        const list = document.getElementById('fruits');
+        for (const item of items) {
+          const row = document.createElement('li');
+          row.textContent = item.name;
+          list.appendChild(row);
+        }
+      });
+  </script>
+</body>
+</html>
